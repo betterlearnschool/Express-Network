@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Network</title>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            z-index: -1;
+        }
+        .container {
+            margin: 50px auto;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 3rem;
+            color: #1E90FF;
+            text-shadow: 0 0 15px rgba(30, 144, 255, 0.5);
+        }
+        .search-bar {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .search-bar::placeholder {
+            color: #1E90FF;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 10px;
+        }
+        .app {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .app img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+        .app:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 20px rgba(30, 144, 255, 0.8);
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.8);
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Button Style */
+        .button-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #007BFF;
+        }
+
+        /* Capsule with Links */
+        .links-capsule {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+            width: 250px;
+            z-index: 10;
+        }
+
+        .links-capsule a {
+            color: #1E90FF;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .links-capsule a:hover {
+            color: #007BFF;
+        }
+
+        /* Taskbar Styles */
+        .taskbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%; /* Full height of the screen */
+            width: 80px; /* Narrow width for vertical taskbar */
+            background-color: #1E1E1E;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .taskbar a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+        .taskbar a:hover {
+            color: #1E90FF;
+        }
+        .taskbar .icon {
+            font-size: 24px;
+        }
+
+        /* Taskbar styles - Bottom side */
+        .taskbar-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1E1E1E;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center; /* Center align the content */
+            align-items: center;
+            box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .taskbar-bottom a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+        .taskbar-bottom a:hover {
+            color: #1E90FF;
+        }
+        .taskbar-bottom .icon {
+            font-size: 24px;
+        }
+
+        /* Credits text styles */
+        .credits {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <h1>Express Network</h1>
+        <div class="grid">
+            <!-- Add your app content here -->
+        </div>
+        
+        <div class="iframe-container">
+            <div class="button-container">
+                <!-- Other Links Button -->
+                <button id="otherLinksBtn">Other Links</button>
+                <!-- Fullscreen Button -->
+                <button id="fullscreenBtn">Go Fullscreen</button>
+            </div>
+            <iframe id="iframe" src="https://tlk.io/expressntework"></iframe>
+            
+            <!-- Capsule with Links -->
+            <div class="links-capsule" id="linksCapsule">
+                <a href="https://tlk.io/expressnetwork1" target="_blank" class="link" data-src="https://tlk.io/expressnetwork1">Link 1</a>
+                <a href="https://tlk.io/expressnetwork2" target="_blank" class="link" data-src="https://tlk.io/expressnetwork2">Link 2</a>
+                <a href="https://tlk.io/expressnetwork3" target="_blank" class="link" data-src="https://tlk.io/expressnetwork3">Link 3</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <a href="index.html" class="icon" title="Home"><i class="fa fa-home"></i></a>
+        <a href="search.html" class="icon" title="Search"><i class="fa fa-search"></i></a>
+        <a href="settings.html" class="icon" title="Settings"><i class="fa fa-cogs"></i></a>
+        <a href="help.html" class="icon" title="Help"><i class="fa fa-question-circle"></i></a>
+    </div>
+    
+    <!-- Taskbar content - Bottom -->
+    <div class="taskbar-bottom">
+        <p class="credits">Credits: Your mom 😂 You thought I was going to reveal how I am, but nope! </p>
+    </div>
+    <script>
+        if (localStorage.getItem('shutdown') === 'true') {
+            window.location.href = 'shutdown.html'; // Redirect to shutdown page if the site is shut down
+        }
+    </script>
+    <script>
+        // Fullscreen functionality
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const iframeContainer = document.querySelector('.iframe-container');
+        
+        // "Other Links" button functionality
+        const otherLinksBtn = document.getElementById('otherLinksBtn');
+        const linksCapsule = document.getElementById('linksCapsule');
+        
+        otherLinksBtn.addEventListener('click', () => {
+            // Toggle visibility of the links capsule
+            linksCapsule.style.display = (linksCapsule.style.display === 'block') ? 'none' : 'block';
+        });
+
+        // Change iframe source when a link is clicked
+        const links = document.querySelectorAll('.links-capsule .link');
+        const iframe = document.getElementById('iframe');
+        
+        links.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default action (navigation)
+
+                // Change iframe src to the link's data-src
+                iframe.src = link.getAttribute('data-src');
+                
+                // Hide the links capsule after selecting a link
+                linksCapsule.style.display = 'none';
+            });
+        });
+
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                iframeContainer.requestFullscreen().catch(err => console.log(err));
+                fullscreenBtn.textContent = "Exit Fullscreen";
+            } else {
+                document.exitFullscreen();
+                fullscreenBtn.textContent = "Go Fullscreen";
+            }
+        });
+    </script>
+
+<script>
+    window.onload = function() {
+      var adElement = document.querySelector('a[href="https://tiiny.host?ref=free-site"]');
+      if (adElement) {
+        adElement.remove();
+      }
+    };
+  </script>
+
+    <!-- FontAwesome Icons (Optional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</body>
+</html>
