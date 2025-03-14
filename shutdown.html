@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Shutdown - Void Network</title>
+    <script src="script.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #FF6347;
+        }
+        p {
+            font-size: 1.5rem;
+            color: #FF6347;
+        }
+    </style>
+</head>
+
+<script>document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.querySelector(".grid");
+    const container = document.querySelector(".container");
+    const iframeContainer = document.querySelector(".iframe-container");
+    const heading = document.querySelector("h1");
+    const taskbar = document.querySelector(".taskbar");
+    const taskbarBottom = document.querySelector(".taskbar-bottom");
+    const linksCapsule = document.getElementById("linksCapsule");
+
+    function adjustLayout() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Adjust grid layout for tighter spacing
+        grid.style.gap = "0px";
+
+        // Position right taskbar
+        taskbar.style.position = "fixed";
+        taskbar.style.right = "0";
+        taskbar.style.top = "0";
+        taskbar.style.bottom = "0";
+        taskbar.style.width = "6vw";  // Using viewport width for a dynamic size
+
+        // Position bottom taskbar
+        taskbarBottom.style.position = "fixed";
+        taskbarBottom.style.bottom = "0";
+        taskbarBottom.style.left = "0";
+        taskbarBottom.style.right = "0";
+        taskbarBottom.style.height = "5vh";  // Using viewport height for responsiveness
+
+        // Update grid and containers based on width and height
+        if (width <= 1366) {
+            grid.style.gridTemplateColumns = "repeat(3, 1fr)";
+            heading.style.fontSize = "2.4rem";
+            container.style.width = "85%";
+            iframeContainer.style.height = `${height * 0.3}px`;  // Responsive height
+            linksCapsule.style.width = "65%";
+            linksCapsule.style.height = `${height * 0.2}px`;  // Dynamic height based on viewport
+        } else if (width <= 1920) {
+            grid.style.gridTemplateColumns = "repeat(4, 1fr)";
+            heading.style.fontSize = "2.5rem";
+            container.style.width = "80%";
+            iframeContainer.style.height = "450px";
+            linksCapsule.style.width = "60%";
+            linksCapsule.style.height = "300px";
+        } else {
+            grid.style.gridTemplateColumns = "repeat(5, 1fr)";  // Larger screens
+            heading.style.fontSize = "3rem";
+            container.style.width = "75%";
+            iframeContainer.style.height = "500px";
+            linksCapsule.style.width = "55%";
+            linksCapsule.style.height = "350px";
+        }
+
+        // Adjust font sizes for smaller screens
+        if (height <= 600) {
+            heading.style.fontSize = "1.8rem"; // Smaller font size for very small screens
+        }
+    }
+
+    // Initial layout adjustment
+    adjustLayout();
+
+    // Adjust layout on window resize
+    window.addEventListener("resize", adjustLayout);
+});
+</script>
+<body>
+    <h1>Site is Currently Shut Down</h1>
+    <p>The website is currently unavailable due to a shutdown. Please try again later.</p>
+</body>
+</html>
