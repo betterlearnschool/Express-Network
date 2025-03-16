@@ -36,7 +36,7 @@
             padding-top: 20px;
             box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
             transition: width 0.3s ease;
-            z-index: 9999; /* Increased z-index to be in front of everything */
+            z-index: 9999; /* Ensure it's always on top */
         }
 
         .taskbar:hover {
@@ -75,6 +75,7 @@
             width: calc(100% - 80px);
             height: 100vh;
             position: relative;
+            transition: margin-left 0.3s ease; /* Transition for moving content */
         }
 
         .content iframe {
@@ -175,6 +176,18 @@
             iframe.msRequestFullscreen();
         }
     }
+
+    // Animation effect for the content behind the taskbar
+    const taskbar = document.querySelector('.taskbar');
+    const content = document.querySelector('.content');
+
+    taskbar.addEventListener('mouseenter', function() {
+        content.style.marginLeft = '120px'; // Move content when the taskbar is hovered
+    });
+
+    taskbar.addEventListener('mouseleave', function() {
+        content.style.marginLeft = '80px'; // Reset content position when the hover ends
+    });
 </script>
 
 </body>
