@@ -134,7 +134,9 @@
     }
 </script>
 
-<script>let clickCount = 0;
+<script>    let clickCount = 0;
+  const loadingScreen = document.getElementById('loading-screen');
+
   document.getElementById('embedded-frame').addEventListener('load', function() {
       if (clickCount < 3) {
           const iframeDoc = this.contentDocument || this.contentWindow.document;
@@ -142,9 +144,16 @@
           if (goButton) {
               goButton.click();
               clickCount++;
+              if (clickCount === 3) {
+                  loadingScreen.style.display = 'flex';
+                  setTimeout(() => {
+                      loadingScreen.style.display = 'none';
+                  }, 3000);
+              }
           }
       }
   });
+</script>
 </script>
 </script>
 
