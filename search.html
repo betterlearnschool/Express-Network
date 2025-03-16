@@ -21,6 +21,7 @@
             display: flex;
         }
 
+        /* Taskbar Styling */
         .taskbar {
             position: fixed;
             top: 0;
@@ -102,6 +103,7 @@
 </head>
 <body>
 
+<!-- Left Taskbar -->
 <div class="taskbar">
     <a href="index.html" class="icon home">&#x1F3E0;</a>
     <hr class="divider">
@@ -113,6 +115,7 @@
     <a href="amin.html" class="icon">&#x1F9F0;</a>
 </div>
 
+<!-- Embedded Content -->
 <div class="content">
     <iframe id="embedded-frame" src="https://express-network.elude.buzz/?cdURL=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8="></iframe>
     <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
@@ -129,14 +132,20 @@
             iframe.msRequestFullscreen();
         }
     }
+</script>
 
-    document.getElementById('embedded-frame').addEventListener('load', function() {
-        const iframeDoc = this.contentDocument || this.contentWindow.document;
-        const goButton = iframeDoc.getElementById('button');
-        if (goButton) {
-            goButton.click();
-        }
-    });
+<script>let clickCount = 0;
+  document.getElementById('embedded-frame').addEventListener('load', function() {
+      if (clickCount < 3) {
+          const iframeDoc = this.contentDocument || this.contentWindow.document;
+          const goButton = iframeDoc.getElementById('button');
+          if (goButton) {
+              goButton.click();
+              clickCount++;
+          }
+      }
+  });
+</script>
 </script>
 
 </body>
