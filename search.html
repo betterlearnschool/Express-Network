@@ -1,0 +1,407 @@
+<!-- Add these HTML elements before the closing </body> tag -->
+
+<!-- Supernova Explosion -->
+<div class="supernova"></div>
+
+<!-- Pulsar Beam -->
+<div class="pulsar">
+  <div class="pulsar-star"></div>
+  <div class="pulsar-beam"></div>
+</div>
+
+<!-- Cosmic Vortex -->
+<div class="cosmic-vortex">
+  <div class="vortex-ring ring1"></div>
+  <div class="vortex-ring ring2"></div>
+  <div class="vortex-ring ring3"></div>
+  <div class="vortex-ring ring4"></div>
+  <div class="vortex-ring ring5"></div>
+</div>
+
+<!-- Aurora Effect -->
+<div class="aurora-container">
+  <div class="aurora aurora1"></div>
+  <div class="aurora aurora2"></div>
+  <div class="aurora aurora3"></div>
+</div>
+
+<!-- Meteor Shower -->
+<div class="meteor-shower"></div>
+
+<!-- Add this to your <style> section -->
+<style>
+  /* SUPERNOVA ANIMATION */
+  .supernova {
+    position: absolute;
+    top: 35%;
+    left: 70%;
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    animation: supernovaExplosion 10s infinite;
+    animation-delay: 3s;
+  }
+
+  @keyframes supernovaExplosion {
+    0% {
+      transform: scale(1);
+      opacity: 0.2;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    }
+    1% {
+      opacity: 1;
+      box-shadow: 0 0 20px 4px rgba(255, 255, 255, 1);
+    }
+    2% {
+      transform: scale(20);
+      box-shadow: 0 0 80px 15px rgba(255, 200, 100, 1);
+    }
+    5% {
+      transform: scale(40);
+      opacity: 0.8;
+      box-shadow: 0 0 100px 30px rgba(255, 100, 50, 0.8);
+    }
+    15% {
+      transform: scale(60);
+      opacity: 0.4;
+      box-shadow: 0 0 100px 30px rgba(100, 50, 200, 0.4);
+    }
+    30% {
+      transform: scale(80);
+      opacity: 0.2;
+      box-shadow: 0 0 80px 20px rgba(50, 100, 255, 0.2);
+    }
+    100% {
+      transform: scale(100);
+      opacity: 0;
+      box-shadow: 0 0 40px 10px rgba(0, 50, 200, 0);
+    }
+  }
+
+  /* PULSAR BEAM ANIMATION */
+  .pulsar {
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    width: 6px;
+    height: 6px;
+    z-index: 3;
+  }
+
+  .pulsar-star {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    animation: pulsarBlink 2s infinite;
+  }
+
+  .pulsar-beam {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0 0 20px 5px rgba(100, 200, 255, 0.4);
+    transform-origin: center;
+    animation: pulsarBeam 2s infinite;
+  }
+
+  @keyframes pulsarBlink {
+    0%, 100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+
+  @keyframes pulsarBeam {
+    0%, 100% {
+      transform: rotate(0deg);
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    50% {
+      width: 800px;
+      height: 2px;
+      opacity: 0.7;
+      transform: rotate(0deg);
+    }
+    55% {
+      opacity: 0;
+    }
+    60% {
+      width: 0;
+      height: 0;
+    }
+    90% {
+      width: 800px;
+      height: 2px;
+      opacity: 0.7;
+      transform: rotate(90deg);
+    }
+    95% {
+      opacity: 0;
+    }
+  }
+
+  /* COSMIC VORTEX ANIMATION */
+  .cosmic-vortex {
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    width: 100px;
+    height: 100px;
+    perspective: 800px;
+    z-index: 2;
+    opacity: 0.7;
+  }
+
+  .vortex-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform-style: preserve-3d;
+  }
+
+  .ring1 {
+    width: 20px;
+    height: 20px;
+    animation: vortexSpin 10s linear infinite;
+  }
+
+  .ring2 {
+    width: 40px;
+    height: 40px;
+    animation: vortexSpin 12s linear infinite reverse;
+  }
+
+  .ring3 {
+    width: 60px;
+    height: 60px;
+    animation: vortexSpin 14s linear infinite;
+  }
+
+  .ring4 {
+    width: 80px;
+    height: 80px;
+    animation: vortexSpin 16s linear infinite reverse;
+  }
+
+  .ring5 {
+    width: 100px;
+    height: 100px;
+    animation: vortexSpin 18s linear infinite;
+  }
+
+  @keyframes vortexSpin {
+    0% {
+      transform: translate(-50%, -50%) rotateX(60deg) rotateY(0deg) rotateZ(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotateX(60deg) rotateY(360deg) rotateZ(360deg);
+    }
+  }
+
+  /* AURORA ANIMATION */
+  .aurora-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .aurora {
+    position: absolute;
+    bottom: -50px;
+    width: 100%;
+    height: 150px;
+    filter: blur(15px);
+    opacity: 0.3;
+    animation: auroraWave 15s infinite ease-in-out alternate;
+  }
+
+  .aurora1 {
+    background: linear-gradient(0deg, transparent, rgba(0, 255, 170, 0.5));
+    animation-delay: 0s;
+  }
+
+  .aurora2 {
+    background: linear-gradient(0deg, transparent, rgba(111, 0, 255, 0.5));
+    animation-delay: -5s;
+  }
+
+  .aurora3 {
+    background: linear-gradient(0deg, transparent, rgba(0, 140, 255, 0.5));
+    animation-delay: -10s;
+  }
+
+  @keyframes auroraWave {
+    0% {
+      transform: translateX(-100%) translateY(10px) scaleY(0.8);
+    }
+    50% {
+      transform: translateX(0%) translateY(-5px) scaleY(1.1);
+    }
+    100% {
+      transform: translateX(100%) translateY(10px) scaleY(0.8);
+    }
+  }
+
+  /* METEOR SHOWER ANIMATION */
+  .meteor-shower {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .meteor-shower::before,
+  .meteor-shower::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff 50%, rgba(255, 255, 255, 0));
+    border-radius: 50%;
+    animation: meteorFall 3s linear infinite;
+    opacity: 0;
+  }
+
+  .meteor-shower::before {
+    top: -10%;
+    right: 10%;
+    transform: rotate(45deg);
+  }
+
+  .meteor-shower::after {
+    top: -10%;
+    right: 40%;
+    animation-delay: 1.5s;
+    transform: rotate(50deg);
+  }
+
+  @keyframes meteorFall {
+    0% {
+      transform: translateX(0) translateY(0) rotate(45deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    20% {
+      transform: translateX(-250px) translateY(250px) rotate(45deg);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Make animations responsive */
+  @media (max-width: 768px) {
+    .cosmic-vortex {
+      transform: scale(0.7);
+    }
+    
+    .aurora-container {
+      height: 100px;
+    }
+    
+    .aurora {
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cosmic-vortex {
+      transform: scale(0.5);
+    }
+    
+    .aurora-container {
+      height: 80px;
+    }
+    
+    .aurora {
+      height: 80px;
+      filter: blur(10px);
+    }
+    
+    .supernova {
+      transform: scale(0.8);
+    }
+  }
+
+  
+  .divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+</style>
+
+<!-- Add this script to create multiple meteors dynamically -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Create multiple meteors
+    const meteorShower = document.querySelector('.meteor-shower');
+    
+    for (let i = 0; i < 5; i++) {
+      const meteor = document.createElement('div');
+      meteor.classList.add('meteor');
+      meteor.style.position = 'absolute';
+      meteor.style.top = `${Math.random() * 20}%`;
+      meteor.style.right = `${Math.random() * 80}%`;
+      meteor.style.width = '100px';
+      meteor.style.height = '2px';
+      meteor.style.background = 'linear-gradient(to right, rgba(255, 255, 255, 0), #fff 50%, rgba(255, 255, 255, 0))';
+      meteor.style.borderRadius = '50%';
+      meteor.style.transform = `rotate(${45 + Math.random() * 10}deg)`;
+      meteor.style.opacity = '0';
+      meteor.style.zIndex = '2';
+      meteor.style.animation = `meteorFall 3s linear infinite ${Math.random() * 5}s`;
+      
+      meteorShower.appendChild(meteor);
+    }
+    
+    // Make supernova occasional and random
+    setInterval(() => {
+      const supernova = document.querySelector('.supernova');
+      if (Math.random() > 0.7) {
+        supernova.style.animationName = 'none';
+        supernova.offsetHeight; // Trigger reflow
+        supernova.style.animationName = 'supernovaExplosion';
+        supernova.style.left = `${30 + Math.random() * 40}%`;
+        supernova.style.top = `${20 + Math.random() * 40}%`;
+      }
+    }, 10000);
+  });
+</script>
