@@ -21,7 +21,6 @@
             display: flex;
         }
 
-        /* Taskbar Styling */
         .taskbar {
             position: fixed;
             top: 0;
@@ -99,11 +98,26 @@
         .fullscreen-btn:hover {
             background-color: #d68b00;
         }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 20;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<!-- Left Taskbar -->
 <div class="taskbar">
     <a href="index.html" class="icon home">&#x1F3E0;</a>
     <hr class="divider">
@@ -115,10 +129,10 @@
     <a href="amin.html" class="icon">&#x1F9F0;</a>
 </div>
 
-<!-- Embedded Content -->
 <div class="content">
     <iframe id="embedded-frame" src="https://express-network.elude.buzz/?cdURL=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8="></iframe>
     <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+    <div id="loading-screen" class="loading-screen">Please wait a second, we are loading...</div>
 </div>
 
 <script>
@@ -132,29 +146,26 @@
             iframe.msRequestFullscreen();
         }
     }
-</script>
 
-<script>    let clickCount = 0;
-  const loadingScreen = document.getElementById('loading-screen');
+    let clickCount = 0;
+    const loadingScreen = document.getElementById('loading-screen');
 
-  document.getElementById('embedded-frame').addEventListener('load', function() {
-      if (clickCount < 3) {
-          const iframeDoc = this.contentDocument || this.contentWindow.document;
-          const goButton = iframeDoc.getElementById('button');
-          if (goButton) {
-              goButton.click();
-              clickCount++;
-              if (clickCount === 3) {
-                  loadingScreen.style.display = 'flex';
-                  setTimeout(() => {
-                      loadingScreen.style.display = 'none';
-                  }, 3000);
-              }
-          }
-      }
-  });
-</script>
-</script>
+    document.getElementById('embedded-frame').addEventListener('load', function() {
+        if (clickCount < 3) {
+            const iframeDoc = this.contentDocument || this.contentWindow.document;
+            const goButton = iframeDoc.getElementById('button');
+            if (goButton) {
+                goButton.click();
+                clickCount++;
+                if (clickCount === 3) {
+                    loadingScreen.style.display = 'flex';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 3000);
+                }
+            }
+        }
+    });
 </script>
 
 </body>
