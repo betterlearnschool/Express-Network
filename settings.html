@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express-Network</title>
+    <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon"> <!-- Default favicon -->
+    <script src="tabandico.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Taskbar Styling */
+        .taskbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
+            transition: width 0.3s ease;
+            z-index: 10; /* Make sure taskbar is above the black hole */
+        }
+
+        .taskbar a {
+    display: block;
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+    text-align: center;
+    text-decoration: none; /* Removes the underline */
+    color: #fff;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+.taskbar:hover {
+    width: 110px; /* Slightly reduce hover expansion */
+}
+
+.taskbar a {
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+}
+
+.taskbar a.icon {
+    font-size: 2rem; /* Adjust icon size for consistency */
+}
+
+.divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+
+        /* Black Hole Styling */
+        .black-hole {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20vw;
+            height: 20vw;
+            background: radial-gradient(circle, #000 35%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
+            animation: blackHoleAnimation 5s infinite, lightWarp 1.5s infinite alternate;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+        }
+
+        @keyframes blackHoleAnimation {
+            0% { transform: scale(1) translate(-50%, -50%); }
+            50% { transform: scale(1.1) translate(-50%, -50%); }
+            100% { transform: scale(1) translate(-50%, -50%); }
+        }
+
+        @keyframes lightWarp {
+            0% { filter: blur(5px); }
+            100% { filter: blur(10px); }
+        }
+
+        /* Dropdown Menu Styling */
+        .options {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;  /* Reduce padding */
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Heading Styling for Settings */
+        .settings-heading {
+            font-size: 1.5rem;  /* Decreased font size */
+            color: #f2a900;
+            margin-bottom: 15px;  /* Reduce margin */
+            font-weight: bold;
+        }
+
+        /* Make the text in the options smaller */
+        .options h3 {
+            font-size: 1rem;  /* Reduced font size for the subtitle */
+            margin-bottom: 10px;  /* Adjust margin */
+        }
+
+        /* Make the dropdown menu and button smaller */
+        .options select,
+        .options button {
+            margin: 8px 0;  /* Reduced margin */
+            padding: 8px;   /* Reduced padding */
+            font-size: 0.9rem;  /* Smaller font size */
+            border-radius: 5px;
+        }
+
+        /* Button Styling */
+        .options button {
+            background-color: #f2a900;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .options button:hover {
+            background-color: #d68b00;
+        }
+
+        /* Free Counter Styling */
+        .counter-container {
+            position: fixed; /* Fixed position to stay at the top-right */
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            z-index: 1000; /* Make sure it stays on top */
+            background-color: rgba(0, 0, 0, 0.5); /* Optional: Semi-transparent background */
+            padding: 10px;
+            border-radius: 5px; /* Optional: Rounded corners */
+            color: white;
+        }
+
+        /* Star Elements Styling */
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: twinkle 2s infinite alternate, moveToBlackHole 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes moveToBlackHole {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .taskbar {
+                width: 60px;
+                padding-top: 15px;
+            }
+
+            .taskbar a {
+                font-size: 1.3rem;
+            }
+
+            .taskbar a.icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .taskbar {
+                width: 50px;
+                padding-top: 10px;
+            }
+
+            .taskbar a {
+                font-size: 1.1rem;
+            }
+
+            .taskbar a.icon {
+                font-size: 1.8rem;
+            }
+        }
+
+        
+        .divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Left Taskbar -->
+<div class="taskbar">
+    <a href="index.html" class="icon home">&#x1F3E0;</a> <!-- Home Icon -->
+    <hr class="divider"> <!-- Horizontal Line -->
+    <a href="games.html" class="icon">&#x1F3AE;</a> <!-- Game Icon -->
+    <a href="search.html" class="icon">&#x1F50D;</a> <!-- Search Icon -->
+    <a href="news.html" class="icon">&#x1F4F0;</a> <!-- News Icon -->
+    <a href="settings.html" class="icon">&#x2699;</a> <!-- Settings Icon -->
+    <a href="about.html" class="icon">&#x1F4AC;</a> <!-- About Icon -->
+    <a href="amin.html" class="icon">&#x1F9F0;</a> <!-- About Icon -->
+</div>
+
+<!-- Black Hole Animation -->
+<div class="black-hole"></div>
+
+<!-- Dropdown Menu for Changing Title and Icon -->
+<div class="options">
+    <div class="settings-heading">Settings</div> <!-- Heading for Settings -->
+    
+    <h3>Customize Your Page</h3>
+    
+    <!-- Single Dropdown for Selecting Title and Icon -->
+    <label for="select-option">Select Option:</label>
+    <select id="select-option">
+        <option value="google">Google</option>
+        <option value="schoolgy">Schoolgy</option>
+        <option value="stellar">Soon</option>
+        <option value="cosmic">Soon</option>
+        <option value="galaxy">Soon</option>
+    </select>
+    
+    <button onclick="applyChanges()">Apply Changes</button>
+</div>
+
+<!-- Free Counter -->
+<div class="counter-container">
+    <a href="https://www.free-counters.org/" style="color: white; text-decoration: none;">Free-Counters.org</a>
+    <script type="text/javascript" src="https://www.freevisitorcounters.com/auth.php?id=c0d63168dc71dd3c7dbb4cb13c0b8c548edeaeab"></script>
+    <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1315805/t/0"></script>
+</div>
+
+<!-- Star Elements (Creating Random Stars in the Background) -->
+<script>
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.animationDuration = `${Math.random() * 1 + 1}s`;
+        document.body.appendChild(star);
+    }
+</script>
+
+
+
+</body>
+</html>

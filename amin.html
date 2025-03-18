@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express-Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .taskbar a {
+    display: block;
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+    text-align: center;
+    text-decoration: none; /* Removes the underline */
+    color: #fff;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+.taskbar:hover {
+    width: 110px; /* Slightly reduce hover expansion */
+}
+
+.taskbar a {
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+}
+
+.taskbar a.icon {
+    font-size: 2rem; /* Adjust icon size for consistency */
+}
+
+.divider {
+    width: 60%;
+    margin: 10px 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .planet-1 {
+            width: 150px; height: 150px;
+            background: linear-gradient(135deg, #ff7b00, #ff5500);
+            top: 15%; right: 15%;
+        }
+        .planet-2 {
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, #42b0ff, #1a7dff);
+            bottom: 25%; left: 20%;
+        }
+        .admin-container {
+            flex: 1;
+            margin-left: 80px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
+        .admin-card {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .admin-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .admin-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .message.received {
+            background: rgba(66, 176, 255, 0.2);
+            align-self: flex-start;
+        }
+        .message.sent {
+            background: rgba(94, 168, 255, 0.4);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message .sender {font-weight: bold;}
+        .message .time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            text-align: right;
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .input-field, .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .btn {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, #5ea8ff, #42b0ff);
+            color: #fff;
+            cursor: pointer;
+        }
+        .panic-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .panic-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .panic-btn.teacher {background: linear-gradient(45deg, #ffa502, #ff6348);}
+        .panic-btn.sos {background: linear-gradient(45deg, #ff4757, #ff0000);}
+        .login-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding-left: 80px; /* Added padding to make room for the taskbar */
+        }
+        .login-card {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+        }
+        .form-group {margin-bottom: 15px;}
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        .webhook-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 5px;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .admin-content {grid-template-columns: 1fr;}
+        }
+
+        .divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+    </style>
+</head>
+<body>
+<!-- Left Taskbar -->
+<div class="taskbar">
+    <a href="index.html" class="icon home">&#x1F3E0;</a> <!-- Home Icon -->
+    <hr class="divider"> <!-- Horizontal Line -->
+    <a href="games.html" class="icon">&#x1F3AE;</a> <!-- Game Icon -->
+    <a href="search.html" class="icon">&#x1F50D;</a> <!-- Search Icon -->
+    <a href="news.html" class="icon">&#x1F4F0;</a> <!-- News Icon -->
+    <a href="settings.html" class="icon">&#x2699;</a> <!-- Settings Icon -->
+    <a href="about.html" class="icon">&#x1F4AC;</a> <!-- About Icon -->
+    <a href="amin.html" class="icon">&#x1F9F0;</a> <!-- About Icon -->
+</div>
+    
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <h2>Admin Access</h2>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="input-field" placeholder="Enter password">
+            </div>
+            <button class="login-btn btn" onclick="login()">Login</button>
+        </div>
+    </div>
+    
+    <!-- Planets -->
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
+    
+    <!-- Admin Panel -->
+    <div class="admin-container" id="adminContainer">
+        <div class="admin-card">
+            <h1>Express Network Admin Dashboard</h1>
+        </div>
+        
+        <div class="admin-content">
+            <div class="admin-card">
+                <h2>Chat System</h2>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="sender">System</div>
+                            <div class="content">Secure admin channel active.</div>
+                            <div class="time">Now</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Type your message...">
+                        <button class="btn" onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top:15px">Emergency Controls</h2>
+                <div class="panic-buttons">
+                    <button class="panic-btn teacher" onclick="sendAlert('teacher')">⚠️ Teacher Alert</button>
+                    <button class="panic-btn sos" onclick="sendAlert('sos')">🆘 SOS Emergency</button>
+                </div>
+            </div>
+            
+            <div class="admin-card">
+                <h2>Discord Webhook</h2>
+                <div>
+                    <p>Current webhook (encrypted):</p>
+                    <div class="webhook-display" id="webhookDisplay">https://discord.com/api/webhooks/********/********</div>
+                    <div id="webhookStatus">Webhook configured and ready</div>
+                </div>
+                
+                <h2 style="margin-top:15px">Report Issue</h2>
+                <textarea id="issueReport" class="input-field" style="height:100px" placeholder="Describe your issue..."></textarea>
+                <button class="btn" style="margin-top:10px" onclick="reportIssue()">Send Report</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Set your actual Discord webhook URL here
+        const discordWebhook = "https://discord.com/api/webhooks/1350869234569318421/h_WY0dx3GznVufq81MgFRx2XiGt2IyXgF1iMNoyZZxeQlOPY5zOjb-gbRueqMhXoiR-f";
+        
+        // Login System
+        function login() {
+            const password = document.getElementById('password').value;
+            if (password === "rip spacebar") {
+                // Hide login screen, sidebar is already visible
+                document.getElementById('loginScreen').style.display = 'none';
+            } else {
+                alert("Invalid password!");
+            }
+        }
+        
+        function logout() {
+            // Show login screen, but keep sidebar visible
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+        
+        // Chat function
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                const chatBox = document.getElementById('chatMessages');
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                chatBox.innerHTML += `
+                    <div class="message sent">
+                        <div class="sender">Admin</div>
+                        <div class="content">${message}</div>
+                        <div class="time">${time}</div>
+                    </div>
+                `;
+                
+                input.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Simulate response
+                setTimeout(() => {
+                    chatBox.innerHTML += `
+                        <div class="message received">
+                            <div class="sender">System</div>
+                            <div class="content">Message received!</div>
+                            <div class="time">${time}</div>
+                        </div>
+                    `;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+            }
+        }
+        
+        // Send to Discord webhook
+        async function sendToDiscord(content) {
+            try {
+                const response = await fetch(discordWebhook, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        username: "admin reports"
+                    })
+                });
+                
+                if (response.ok) {
+                    return true;
+                } else {
+                    console.error("Error sending to Discord:", await response.text());
+                    return false;
+                }
+            } catch (error) {
+                console.error("Failed to send to Discord:", error);
+                return false;
+            }
+        }
+        
+        // Alert functions
+        async function sendAlert(type) {
+            let message = "";
+            if (type === 'teacher') {
+                message = "⚠️ TEACHER ALERT: Teacher have figured out about the webiste!";
+            } else if (type === 'sos') {
+                message = "🆘 SOS EMERGENCY: website is know by teacher or tech person its only a matter of time!";
+            }
+            
+            // Log the alert to chat
+            const chatBox = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            chatBox.innerHTML += `
+                <div class="message received">
+                    <div class="sender">System</div>
+                    <div class="content">ALERT SENT: ${message}</div>
+                    <div class="time">${time}</div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Send to Discord
+            const success = await sendToDiscord(message);
+            if (success) {
+                alert(`Alert sent: ${message}`);
+            } else {
+                alert("Failed to send alert. Check your webhook configuration.");
+            }
+        }
+        
+        // Report issue function
+        async function reportIssue() {
+            const issue = document.getElementById('issueReport').value.trim();
+            if (!issue) {
+                alert("Please enter an issue to report");
+                return;
+            }
+            
+            const message = `📝 ISSUE REPORT: ${issue}`;
+            const success = await sendToDiscord(message);
+            
+            if (success) {
+                alert("Report sent!");
+                document.getElementById('issueReport').value = '';
+            } else {
+                alert("Failed to send report. Check your webhook configuration.");
+            }
+        }
+
+        // Enter key for chat input
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express-Network</title>
+    <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #button {
+            padding: 15px 30px;
+            background-color: #f2a900;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10; /* Ensure the button stays above content */
+            transition: background-color 0.3s ease;
+        }
+
+        #button:hover {
+            background-color: #d68b00;
+        }
+
+        /* Taskbar Styling */
+        .taskbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, width 0.3s ease;
+            z-index: 10000; /* Taskbar is always on top */
+        }
+
+        .taskbar a {
+            display: block;
+            margin: 8px 0; /* Reduce spacing between icons */
+            font-size: 1.2rem; /* Make icons slightly smaller */
+            text-align: center;
+            text-decoration: none; /* Removes the underline */
+            color: #fff;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hover animation for the taskbar */
+        .taskbar:hover {
+            width: 110px; /* Slightly increase the width */
+            transform: translateX(0); /* Ensure smooth transform */
+        }
+
+        .taskbar a.icon {
+            font-size: 2rem; /* Adjust icon size for consistency */
+        }
+
+        .divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        /* Embed container styling */
+        .embed-container {
+            position: fixed;
+            top: 0;
+            left: 80px; /* Start after the taskbar */
+            width: calc(100% - 80px); /* Full width minus taskbar width */
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Black background */
+            z-index: 9999; /* Background stays below taskbar but on top of iframe */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden; /* Initially hidden */
+            opacity: 0; /* Initially hidden with opacity */
+            transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth fade and movement */
+        }
+
+        .embed-container iframe {
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            border: none;
+            z-index: 1; /* Iframe stays behind the black background */
+        }
+
+        /* Taskbar Hover Effect on Embed */
+        .taskbar:hover ~ .embed-container {
+            transform: translateX(30px); /* Move the embed container with the taskbar expansion */
+            opacity: 1; /* Fade in the embed container */
+            visibility: visible; /* Make it visible */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="taskbar">
+    <a href="index.html" class="icon home">&#x1F3E0;</a>
+    <hr class="divider">
+    <a href="games.html" class="icon">&#x1F3AE;</a>
+    <a href="search.html" class="icon">&#x1F50D;</a>
+    <a href="news.html" class="icon">&#x1F4F0;</a>
+    <a href="settings.html" class="icon">&#x2699;</a>
+    <a href="about.html" class="icon">&#x1F4AC;</a>
+    <a href="amin.html" class="icon">&#x1F9F0;</a>
+</div>
+
+<!-- Button to trigger redirect -->
+<input id="button" type="submit" value="Click me first!" />
+
+<!-- Embed container that will hold the iframe -->
+<div class="embed-container" id="embedContainer">
+    <iframe id="embedIframe" src="" frameborder="0"></iframe>
+</div>
+
+<!-- JavaScript to handle button click, hide it, and show the embedded content -->
+<script>
+    document.getElementById('button').addEventListener('click', function() {
+        // Hide the button when clicked
+        document.getElementById('button').style.display = 'none';
+
+        // Show the embed container and iframe with fade-in effect
+        var embedContainer = document.getElementById('embedContainer');
+        embedContainer.style.visibility = 'visible';
+        embedContainer.style.opacity = 1; // Fade in
+
+        // Set the iframe URL
+        var iframe = document.getElementById('embedIframe');
+        iframe.src = 'https://edu-production-05f8.up.railway.app/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqopr%7B%2Fknfez%3Faoltknwe%3Fhvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah3Fgmoelg%2506qg%5Dsq%251D(Me6cDiD%7BACYFHqkNIz5%3BYrdMEvk7p%404GAFQ%40ECrX1R5LF5x%7BqkZkNEOlXS9DfKa%3B8Du%3BQGKmDrY3Jsx6AFUaNFgncLC%3Bmk9x4CLK6GWxMCAGHj1frnc%40B2ECFeQ5FcYUYF-QUhkC9PECNOac5ZrJ9%5DA3Ac6luNrtukp%5BVDfpNu5ng5m%5Da2H%40i%2FiXF23IHV7ZQIGxQjh%3Bz3l49wNtgIuoofDGsDGTJqYI93N%60ZC516%5B6eziJwv4HvvGqIpZq%2FJsBp03vfAcIXlzohKNccgngx2ucozDElfRpCtqWL60RXecNffUsqa4YEbgbeePkqscAKNIQDQAhO3i95c1a0CArPJdlv70P4ih4fALYCA%408MBqKV72HKVEhFkudL8%5BnkMqFTvHoFWq51hen1Es3kc6w%3A2%2F55AMZECSRNAjk7nIz%60n5Fk7fKjeuaiUVGJbXAgNJmDexq%7Bu%40YchT_I5NyCYhka8%60UZYKn%5Bh1o5VXY0PXUCDkLCfIbMPgyXV%5BYzWnB2D5F%7BAiQfeF1Ugo_MN%5BM%5Ds54opDIRu3Xp0shxN%40CGxttnXqjRwaANtRsj8QG48uY0qdiZmkGs5%7BI%3A3%60K19x8%7BmHdZLXESPgsC6T9Ge%2FCgQ%2FyCeFbHSPLVsMwGOrwhI0a0OeH%60xKL%3BKhqJqCwjJI0PU%40elphB%2FAjLFekbjfNgsnC2%3BpeC%3AWxwQkIQW4JAHBN-%3AOjm7MMyK0%5BvHpS4JPVxN1QVsbGycpeC%3AsLQnC%5DDljVVeJngRt%3BgJ9w4A66m27zU%5BRlOa8MH%3BbMMpmWU%5DIofrIAF%2FEHR%7Bpg_T2s8lMRNAit6%5D0aneIa2XBG9%2FL%2F9RIGnZ-mNdOxQaDtGhSRq1-22%2FeMT%5BiM6Pk%5B_KnnBUa44a1dgEWShjISWIiofi_Wb%5DI2WHXO4%604EWM3vAcDNC%5BdhY%5DuoNzeM-eMXZmVDHoBtEI6cgU8HMd8Mb%40uurEi6ikW6tSg3TH9zqpApRSS2u3yvKky%60G5YGk3F-27%5BZ%2FTCCae00RER87Tu-Cs%24q%3FEeSk3MhUGRuf4%604EIhDe6sRLp1nMIRgMfNX%5BcUePo%7BkLl273fUZHlVBf7zQ%60T%7B5qRCMLkCdF-6Z00rc%3B6i4%7BAZJcAWM'; // Replace with the desired URL
+
+        // Open a new tab and close it after 3 seconds (optional, as per your previous request)
+        var newTab = window.open('https://edu-production-05f8.up.railway.app/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqopr%7B%2Fknfez%3Faoltknwe%3Fhvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah3Fgmoelg%2506qg%5Dsq%251D(Me6cDiD%7BACYFHqkNIz5%3BYrdMEvk7p%404GAFQ%40ECrX1R5LF5x%7BqkZkNEOlXS9DfKa%3B8Du%3BQGKmDrY3Jsx6AFUaNFgncLC%3Bmk9x4CLK6GWxMCAGHj1frnc%40B2ECFeQ5FcYUYF-QUhkC9PECNOac5ZrJ9%5DA3Ac6luNrtukp%5BVDfpNu5ng5m%5Da2H%40i%2FiXF23IHV7ZQIGxQjh%3Bz3l49wNtgIuoofDGsDGTJqYI93N%60ZC516%5B6eziJwv4HvvGqIpZq%2FJsBp03vfAcIXlzohKNccgngx2ucozDElfRpCtqWL60RXecNffUsqa4YEbgbeePkqscAKNIQDQAhO3i95c1a0CArPJdlv70P4ih4fALYCA%408MBqKV72HKVEhFkudL8%5BnkMqFTvHoFWq51hen1Es3kc6w%3A2%2F55AMZECSRNAjk7nIz%60n5Fk7fKjeuaiUVGJbXAgNJmDexq%7Bu%40YchT_I5NyCYhka8%60UZYKn%5Bh1o5VXY0PXUCDkLCfIbMPgyXV%5BYzWnB2D5F%7BAiQfeF1Ugo_MN%5BM%5Ds54opDIRu3Xp0shxN%40CGxttnXqjRwaANtRsj8QG48uY0qdiZmkGs5%7BI%3A3%60K19x8%7BmHdZLXESPgsC6T9Ge%2FCgQ%2FyCeFbHSPLVsMwGOrwhI0a0OeH%60xKL%3BKhqJqCwjJI0PU%40elphB%2FAjLFekbjfNgsnC2%3BpeC%3AWxwQkIQW4JAHBN-%3AOjm7MMyK0%5BvHpS4JPVxN1QVsbGycpeC%3AsLQnC%5DDljVVeJngRt%3BgJ9w4A66m27zU%5BRlOa8MH%3BbMMpmWU%5DIofrIAF%2FEHR%7Bpg_T2s8lMRNAit6%5D0aneIa2XBG9%2FL%2F9RIGnZ-mNdOxQaDtGhSRq1-22%2FeMT%5BiM6Pk%5B_KnnBUa44a1dgEWShjISWIiofi_Wb%5DI2WHXO4%604EWM3vAcDNC%5BdhY%5DuoNzeM-eMXZmVDHoBtEI6cgU8HMd8Mb%40uurEi6ikW6tSg3TH9zqpApRSS2u3yvKky%60G5YGk3F-27%5BZ%2FTCCae00RER87Tu-Cs%24q%3FEeSk3MhUGRuf4%604EIhDe6sRLp1nMIRgMfNX%5BcUePo%7BkLl273fUZHlVBf7zQ%60T%7B5qRCMLkCdF-6Z00rc%3B6i4%7BAZJcAWM', '_blank');
+        setTimeout(function() {
+            newTab.close();
+        }, 3000); // Close after 3 seconds
+    });
+</script>
+
+<div id="warningMessage" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 15px; border-radius: 5px; font-size: 1.2rem; z-index: 99999;">
+    <p>If it doesn't load at first keep on hitting restart.</p>
+</div>
+
+
+<script>
+    // Display warning message when the page loads
+    window.onload = function() {
+        var warningMessage = document.getElementById('warningMessage');
+        warningMessage.style.display = 'block'; // Show warning message
+
+        // After 60 seconds, show the restart button
+        setTimeout(function() {
+            var restartButton = document.getElementById('restartButton');
+        }, 30000); // 60000ms = 1 minute
+
+        // Restart button click event
+    };
+</script>
+
+
+</body>
+</html>
