@@ -1,121 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Express-Network</title>
-  <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express-Network</title>
+    <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
-      color: #fff;
-      min-height: 100vh;
-      overflow: hidden;
-      display: flex;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-    /* Taskbar Styling */
-    .taskbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 80px;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 20px;
-      box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
-      transition: width 0.3s ease;
-      z-index: 10; /* Make sure taskbar is above the black hole */
-    }
+        #button {
+            padding: 15px 30px;
+            background-color: #f2a900;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10; /* Make sure button stays above content */
+        }
 
-    .taskbar a {
-      display: block;
-      margin: 8px 0;
-      font-size: 1.2rem;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
+        #button:hover {
+            background-color: #d68b00;
+        }
 
-    .taskbar:hover {
-      width: 110px;
-    }
+        /* Taskbar Styling */
+        .taskbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
+            transition: width 0.3s ease;
+            z-index: 10; /* Make sure taskbar is above the black hole */
+        }
 
-    .taskbar a.icon {
-      font-size: 2rem;
-    }
+        .taskbar a {
+            display: block;
+            margin: 8px 0; /* Reduce spacing between icons */
+            font-size: 1.2rem; /* Make icons slightly smaller */
+            text-align: center;
+            text-decoration: none; /* Removes the underline */
+            color: #fff;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
 
-    .divider {
-      width: 60%;
-      margin: 10px 0;
-      border: none;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    }
+        .taskbar:hover {
+            width: 110px; /* Slightly reduce hover expansion */
+        }
 
-    .content {
-      margin-left: 80px;
-      width: calc(100% - 80px);
-      height: 100vh;
-      position: relative;
-      transition: margin-left 0.3s ease;
-    }
+        .taskbar a.icon {
+            font-size: 2rem; /* Adjust icon size for consistency */
+        }
 
-    .content iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+        .divider {
+            width: 60%;
+            margin: 10px 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
 
-    .loading-screen {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      font-size: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9998;
-    }
+        /* Embed container styling */
+        .embed-container {
+            position: fixed;
+            top: 0;
+            left: 80px; /* This makes sure the embed content starts right after the taskbar */
+            width: calc(100% - 80px); /* Make it take the full width of the screen excluding the taskbar */
+            height: 100%; /* Full height of the screen */
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden; /* Initially hidden */
+        }
 
-    #popup-button {
-      display: none;
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      background-color: #f2a900;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 1.2rem;
-    }
-
-    #popup-button:hover {
-      background-color: #d68b00;
-    }
-  </style>
+        .embed-container iframe {
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            border: none;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="taskbar">
+<div class="taskbar">
     <a href="index.html" class="icon home">&#x1F3E0;</a>
     <hr class="divider">
     <a href="games.html" class="icon">&#x1F3AE;</a>
@@ -124,64 +117,37 @@
     <a href="settings.html" class="icon">&#x2699;</a>
     <a href="about.html" class="icon">&#x1F4AC;</a>
     <a href="amin.html" class="icon">&#x1F9F0;</a>
-  </div>
+</div>
 
-  <!-- Loading screen now shows a message telling the user to allow pop-ups -->
-  <div class="loading-screen" id="loading-screen">
-    <p id="popup-message">Allow pop ups plz</p>
-    <button id="popup-button">Click this!</button>
-  </div>
+<!-- Button to trigger redirect -->
+<input id="button" type="submit" value="Click to make it work!" />
 
-  <div class="content">
-    <iframe id="embedded-frame" src="https://edu-production-05f8.up.railway.app/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqopr%7B%2Fknfez%3Faoltknwe%3Fhvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah'3Dq'3Fgmoelg%2506qg%5Dsq%251D(Me6cDiD%7BACYFHqkNIz5%3BYrdMEvk7p%404GAFQ%40ECrX1R5LF5x%7BqkZkNEOlXS9DfKa%3B8Du%3BQGKmDrY3Jsx6AFUaNFgncLC%3Bmk9x4CLK6GWxMCAGHj1frnc%40B2ECFeQ5FcYUYF-QUhkC9PECNOac5ZrJ9%5DA3Ac6luNrtukp%5BVDfpNu5ng5m%5Da2H%40i%2FiXF23IHV7ZQIGxQjh%3Bz3l49wNtgIuoofDGsDGTJqYI93N%60ZC516%5B6eziJwv4HvvGqIpZq%2FJsBp03vfAcIXlzohKNccgngx2ucozDElfRpCtqWL60RXecNffUsqa4YEbgbeePkqscAKNIQDQAhO3i95c1a0CArPJdlv70P4ih4fALYCA%408MBqKV72HKVEhFkudL8%5BnkMqFTvHoFWq51hen1Es3kc6w%3A2%2F55AMZECSRNAjk7nIz%60n5Fk7fKjeuaiUVGJbXAgNJmDexq%7Bu%40YchT_I5NyCYhka8%60UZYKn%5Bh1o5VXY0PXUCDkLCfIbMPgyXV%5BYzWnB2D5F%7BAiQfeF1Ugo_MN%5BM%5Ds54opDIRu3Xp0shxN%40CGxttnXqjRwaANtRsj8QG48uY0qdiZmkGs5%7BI%3A3%60K19x8%7BmHdZLXESPgsC6T9Ge%2FCgQ%2FyCeFbHSPLVsMwGOrwhI0a0OeH%60xKL%3BKhqJqCwjJI0PU%40elphB%2FAjLFekbjfNgsnC2%3BpeC%3AWxwQkIQW4JAHBN-%3AOjm7MMyK0%5BvHpS4JPVxN1QVsbGycpeC%3AsLQnC%5DDljVVeJngRt%3BgJ9w4A66m27zU%5BRlOa8MH%3BbMMpmWU%5DIofrIAF%2FEHR%7Bpg_T2s8lMRNAit6%5D0aneIa2XBG9%2FL%2F9RIGnZ-mNdOxQaDtGhSRq1-22%2FeMT%5BiM6Pk%5B_KnnBUa44a1dgEWShjISWIiofi_Wb%5DI2WHXO4%604EWM3vAcDNC%5BdhY%5DuoNzeM-eMXZmVDHoBtEI6cgU8HMd8Mb%40uurEi6ikW6tSg3TH9zqpApRSS2u3yvKky%60G5YGk'24sgi'3F-27%5BZ%2FTCCae00RER87Tu-Cs%24q%3FEeSk3MhUGRuf4%604EIhDe6sRLp1nMIRgMfNX%5BcUePo%7BkLl273fUZHlVBf7zQ%60T%7B5qRCMLkCdF-6Z00rc%3B6i4%7BAZJcAWM"></iframe>
-    <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
-  </div>
+<!-- Embed container that will hold the iframe -->
+<div class="embed-container" id="embedContainer">
+    <iframe id="embedIframe" src="" frameborder="0"></iframe>
+</div>
 
-  <script>
-    let newTab = window.open("https://example.com", "_blank");
+<!-- JavaScript to handle button click, hide it, and show the embedded content -->
+<script>
+    document.getElementById('button').addEventListener('click', function() {
+        // Hide the button when clicked
+        document.getElementById('button').style.display = 'none';
 
-    if (!newTab) {
-      // If blocked, show the loading screen & button with our message
-      document.getElementById('loading-screen').style.display = 'flex';
-      const popupButton = document.getElementById('popup-button');
-      popupButton.style.display = 'block';
+        // Show the embed container and iframe
+        var embedContainer = document.getElementById('embedContainer');
+        embedContainer.style.visibility = 'visible';
 
-      let clickCount = 0;
-      popupButton.addEventListener('click', function () {
-        clickCount++;
-        if (clickCount === 3) {
-          // Change the message to "Loading..." after three clicks
-          document.getElementById('popup-message').textContent = "Loading...";
-          setTimeout(() => {
-            let manualTab = window.open("https://example.com", "_blank");
+        // Set the iframe URL
+        var iframe = document.getElementById('embedIframe');
+        iframe.src = 'https://edu-production-05f8.up.railway.app/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqopr%7B%2Fknfez%3Faoltknwe%3Fhvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah3Fgmoelg%2506qg%5Dsq%251D(Me6cDiD%7BACYFHqkNIz5%3BYrdMEvk7p%404GAFQ%40ECrX1R5LF5x%7BqkZkNEOlXS9DfKa%3B8Du%3BQGKmDrY3Jsx6AFUaNFgncLC%3Bmk9x4CLK6GWxMCAGHj1frnc%40B2ECFeQ5FcYUYF-QUhkC9PECNOac5ZrJ9%5DA3Ac6luNrtukp%5BVDfpNu5ng5m%5Da2H%40i%2FiXF23IHV7ZQIGxQjh%3Bz3l49wNtgIuoofDGsDGTJqYI93N%60ZC516%5B6eziJwv4HvvGqIpZq%2FJsBp03vfAcIXlzohKNccgngx2ucozDElfRpCtqWL60RXecNffUsqa4YEbgbeePkqscAKNIQDQAhO3i95c1a0CArPJdlv70P4ih4fALYCA%408MBqKV72HKVEhFkudL8%5BnkMqFTvHoFWq51hen1Es3kc6w%3A2%2F55AMZECSRNAjk7nIz%60n5Fk7fKjeuaiUVGJbXAgNJmDexq%7Bu%40YchT_I5NyCYhka8%60UZYKn%5Bh1o5VXY0PXUCDkLCfIbMPgyXV%5BYzWnB2D5F%7BAiQfeF1Ugo_MN%5BM%5Ds54opDIRu3Xp0shxN%40CGxttnXqjRwaANtRsj8QG48uY0qdiZmkGs5%7BI%3A3%60K19x8%7BmHdZLXESPgsC6T9Ge%2FCgQ%2FyCeFbHSPLVsMwGOrwhI0a0OeH%60xKL%3BKhqJqCwjJI0PU%40elphB%2FAjLFekbjfNgsnC2%3BpeC%3AWxwQkIQW4JAHBN-%3AOjm7MMyK0%5BvHpS4JPVxN1QVsbGycpeC%3AsLQnC%5DDljVVeJngRt%3BgJ9w4A66m27zU%5BRlOa8MH%3BbMMpmWU%5DIofrIAF%2FEHR%7Bpg_T2s8lMRNAit6%5D0aneIa2XBG9%2FL%2F9RIGnZ-mNdOxQaDtGhSRq1-22%2FeMT%5BiM6Pk%5B_KnnBUa44a1dgEWShjISWIiofi_Wb%5DI2WHXO4%604EWM3vAcDNC%5BdhY%5DuoNzeM-eMXZmVDHoBtEI6cgU8HMd8Mb%40uurEi6ikW6tSg3TH9zqpApRSS2u3yvKky%60G5YGk3F-27%5BZ%2FTCCae00RER87Tu-Cs%24q%3FEeSk3MhUGRuf4%604EIhDe6sRLp1nMIRgMfNX%5BcUePo%7BkLl273fUZHlVBf7zQ%60T%7B5qRCMLkCdF-6Z00rc%3B6i4%7BAZJcAWM'; // Replace with the desired URL
 
-            if (manualTab) {
-              setTimeout(() => {
-                manualTab.close();
-              }, 3000);
-            }
-            document.getElementById('loading-screen').style.display = 'none';
-          }, 3000);
-        }
-      });
-    } else {
-      // If not blocked, close the new tab after 3 seconds
-      setTimeout(() => {
-        newTab.close();
-      }, 3000);
-    }
-
-    // Taskbar animation
-    const taskbar = document.querySelector('.taskbar');
-    const content = document.querySelector('.content');
-
-    taskbar.addEventListener('mouseenter', function () {
-      content.style.marginLeft = '120px';
+        // Open a new tab and close it after 3 seconds (optional, as per your previous request)
+        var newTab = window.open('https://edu-production-05f8.up.railway.app/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqopr%7B%2Fknfez%3Faoltknwe%3Fhvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah3Fgmoelg%2506qg%5Dsq%251D(Me6cDiD%7BACYFHqkNIz5%3BYrdMEvk7p%404GAFQ%40ECrX1R5LF5x%7BqkZkNEOlXS9DfKa%3B8Du%3BQGKmDrY3Jsx6AFUaNFgncLC%3Bmk9x4CLK6GWxMCAGHj1frnc%40B2ECFeQ5FcYUYF-QUhkC9PECNOac5ZrJ9%5DA3Ac6luNrtukp%5BVDfpNu5ng5m%5Da2H%40i%2FiXF23IHV7ZQIGxQjh%3Bz3l49wNtgIuoofDGsDGTJqYI93N%60ZC516%5B6eziJwv4HvvGqIpZq%2FJsBp03vfAcIXlzohKNccgngx2ucozDElfRpCtqWL60RXecNffUsqa4YEbgbeePkqscAKNIQDQAhO3i95c1a0CArPJdlv70P4ih4fALYCA%408MBqKV72HKVEhFkudL8%5BnkMqFTvHoFWq51hen1Es3kc6w%3A2%2F55AMZECSRNAjk7nIz%60n5Fk7fKjeuaiUVGJbXAgNJmDexq%7Bu%40YchT_I5NyCYhka8%60UZYKn%5Bh1o5VXY0PXUCDkLCfIbMPgyXV%5BYzWnB2D5F%7BAiQfeF1Ugo_MN%5BM%5Ds54opDIRu3Xp0shxN%40CGxttnXqjRwaANtRsj8QG48uY0qdiZmkGs5%7BI%3A3%60K19x8%7BmHdZLXESPgsC6T9Ge%2FCgQ%2FyCeFbHSPLVsMwGOrwhI0a0OeH%60xKL%3BKhqJqCwjJI0PU%40elphB%2FAjLFekbjfNgsnC2%3BpeC%3AWxwQkIQW4JAHBN-%3AOjm7MMyK0%5BvHpS4JPVxN1QVsbGycpeC%3AsLQnC%5DDljVVeJngRt%3BgJ9w4A66m27zU%5BRlOa8MH%3BbMMpmWU%5DIofrIAF%2FEHR%7Bpg_T2s8lMRNAit6%5D0aneIa2XBG9%2FL%2F9RIGnZ-mNdOxQaDtGhSRq1-22%2FeMT%5BiM6Pk%5B_KnnBUa44a1dgEWShjISWIiofi_Wb%5DI2WHXO4%604EWM3vAcDNC%5BdhY%5DuoNzeM-eMXZmVDHoBtEI6cgU8HMd8Mb%40uurEi6ikW6tSg3TH9zqpApRSS2u3yvKky%60G5YGk3F-27%5BZ%2FTCCae00RER87Tu-Cs%24q%3FEeSk3MhUGRuf4%604EIhDe6sRLp1nMIRgMfNX%5BcUePo%7BkLl273fUZHlVBf7zQ%60T%7B5qRCMLkCdF-6Z00rc%3B6i4%7BAZJcAWM', '_blank');
+        setTimeout(function() {
+            newTab.close();
+        }, 3000); // Close after 3 seconds
     });
+</script>
 
-    taskbar.addEventListener('mouseleave', function () {
-      content.style.marginLeft = '80px';
-    });
-  </script>
 </body>
 </html>
