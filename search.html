@@ -32,8 +32,8 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 10; /* Ensure the button stays above content */
             transition: background-color 0.3s ease;
-            z-index: 10; /* Make sure button stays above content */
         }
 
         #button:hover {
@@ -54,8 +54,8 @@
             justify-content: flex-start;
             padding-top: 20px;
             box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
-            transition: width 0.3s ease;
-            z-index: 10; /* Make sure taskbar is above the black hole */
+            transition: transform 0.3s ease, width 0.3s ease;
+            z-index: 10000; /* Taskbar is always on top */
         }
 
         .taskbar a {
@@ -68,8 +68,10 @@
             transition: transform 0.3s ease, color 0.3s ease;
         }
 
+        /* Hover animation for the taskbar */
         .taskbar:hover {
-            width: 110px; /* Slightly reduce hover expansion */
+            width: 110px; /* Slightly increase the width */
+            transform: translateX(0); /* Ensure smooth transform */
         }
 
         .taskbar a.icon {
@@ -88,22 +90,33 @@
         .embed-container {
             position: fixed;
             top: 0;
-            left: 80px; /* This makes sure the embed content starts right after the taskbar */
-            width: calc(100% - 80px); /* Make it take the full width of the screen excluding the taskbar */
-            height: 100%; /* Full height of the screen */
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
+            left: 80px; /* Start after the taskbar */
+            width: calc(100% - 80px); /* Full width minus taskbar width */
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Black background */
+            z-index: 9999; /* Background stays below taskbar but on top of iframe */
             display: flex;
             justify-content: center;
             align-items: center;
             visibility: hidden; /* Initially hidden */
+            opacity: 0; /* Initially hidden with opacity */
+            transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth fade and movement */
         }
 
         .embed-container iframe {
             width: 100%; /* Full width */
             height: 100%; /* Full height */
             border: none;
+            z-index: 1; /* Iframe stays behind the black background */
         }
+
+        /* Taskbar Hover Effect on Embed */
+        .taskbar:hover ~ .embed-container {
+            transform: translateX(30px); /* Move the embed container with the taskbar expansion */
+            opacity: 1; /* Fade in the embed container */
+            visibility: visible; /* Make it visible */
+        }
+
     </style>
 </head>
 <body>
@@ -120,7 +133,7 @@
 </div>
 
 <!-- Button to trigger redirect -->
-<input id="button" type="submit" value="Click to make it work!" />
+<input id="button" type="submit" value="Go!" />
 
 <!-- Embed container that will hold the iframe -->
 <div class="embed-container" id="embedContainer">
@@ -133,9 +146,10 @@
         // Hide the button when clicked
         document.getElementById('button').style.display = 'none';
 
-        // Show the embed container and iframe
+        // Show the embed container and iframe with fade-in effect
         var embedContainer = document.getElementById('embedContainer');
         embedContainer.style.visibility = 'visible';
+        embedContainer.style.opacity = 1; // Fade in
 
         // Set the iframe URL
         var iframe = document.getElementById('embedIframe');
@@ -148,6 +162,34 @@
         }, 3000); // Close after 3 seconds
     });
 </script>
+
+<!-- Warning message -->
+<div id="warningMessage" style="display:none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 15px; border-radius: 5px; font-size: 1.2rem;">
+    <p>If it doesn't load at first keep on hitting restar.</p>
+    <button id="restartButton" style="display:none; padding: 10px 20px; background-color: #f2a900; border: none; border-radius: 5px; color: white; font-size: 1.2rem; cursor: pointer;">
+        Restart
+    </button>
+</div>
+
+<script>
+    // Display warning message when the page loads
+    window.onload = function() {
+        var warningMessage = document.getElementById('warningMessage');
+        warningMessage.style.display = 'block'; // Show warning message
+
+        // After 60 seconds, show the restart button
+        setTimeout(function() {
+            var restartButton = document.getElementById('restartButton');
+            restartButton.style.display = 'block'; // Show Restart button
+        }, 60000); // 60000ms = 1 minute
+
+        // Restart button click event
+        document.getElementById('restartButton').addEventListener('click', function() {
+            window.location.href = 'https://your-website.com'; // Replace with your desired URL
+        });
+    };
+</script>
+
 
 </body>
 </html>
