@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Express-Network</title>
+    <title>Coming Soon</title>
     <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon">
+    <script src="tabandico.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,72 +13,41 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
-            color: #fff;
-            min-height: 100vh;
+        body, html {
+            height: 100%;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
+            color: #fff;
+            font-family: Arial, sans-serif;
         }
 
-        #button {
-            padding: 15px 30px;
+        .container {
+            text-align: center;
+        }
+
+        .soon-text {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+
+        .back-button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #fff;
             background-color: #f2a900;
             border: none;
             border-radius: 5px;
-            color: white;
-            font-size: 1.5rem;
             cursor: pointer;
-            z-index: 10; /* Ensure the button stays above content */
             transition: background-color 0.3s ease;
         }
 
-        #button:hover {
-            background-color: #d68b00;
+        .back-button:hover {
+            background-color: #d28d00;
         }
-
-        /* Taskbar Styling */
-        .taskbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 80px;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 20px;
-            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease, width 0.3s ease;
-            z-index: 10000; /* Taskbar is always on top */
-        }
-
-        .taskbar a {
-            display: block;
-            margin: 8px 0; /* Reduce spacing between icons */
-            font-size: 1.2rem; /* Make icons slightly smaller */
-            text-align: center;
-            text-decoration: none; /* Removes the underline */
-            color: #fff;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        /* Hover animation for the taskbar */
-        .taskbar:hover {
-            width: 110px; /* Slightly increase the width */
-            transform: translateX(0); /* Ensure smooth transform */
-        }
-
-        .taskbar a.icon {
-            font-size: 2rem; /* Adjust icon size for consistency */
-        }
-
+        
         .divider {
             width: 60%;
             margin: 10px 0;
@@ -86,103 +56,14 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         }
 
-        /* Embed container styling */
-        .embed-container {
-            position: fixed;
-            top: 0;
-            left: 80px; /* Start after the taskbar */
-            width: calc(100% - 80px); /* Full width minus taskbar width */
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Black background */
-            z-index: 9999; /* Background stays below taskbar but on top of iframe */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            visibility: hidden; /* Initially hidden */
-            opacity: 0; /* Initially hidden with opacity */
-            transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth fade and movement */
-        }
-
-        .embed-container iframe {
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            border: none;
-            z-index: 1; /* Iframe stays behind the black background */
-        }
-
-        /* Taskbar Hover Effect on Embed */
-        .taskbar:hover ~ .embed-container {
-            transform: translateX(30px); /* Move the embed container with the taskbar expansion */
-            opacity: 1; /* Fade in the embed container */
-            visibility: visible; /* Make it visible */
-        }
-
     </style>
 </head>
 <body>
 
-<div class="taskbar">
-    <a href="index.html" class="icon home">&#x1F3E0;</a>
-    <hr class="divider">
-    <a href="games.html" class="icon">&#x1F3AE;</a>
-    <a href="search.html" class="icon">&#x1F50D;</a>
-    <a href="news.html" class="icon">&#x1F4F0;</a>
-    <a href="settings.html" class="icon">&#x2699;</a>
-    <a href="about.html" class="icon">&#x1F4AC;</a>
-    <a href="amin.html" class="icon">&#x1F9F0;</a>
-</div>
-
-<!-- Button to trigger redirect -->
-<input id="button" type="submit" value="Click me first!" />
-
-<!-- Embed container that will hold the iframe -->
-<div class="embed-container" id="embedContainer">
-    <iframe id="embedIframe" src="" frameborder="0"></iframe>
-</div>
-
-<!-- JavaScript to handle button click, hide it, and show the embedded content -->
-<script>
-    document.getElementById('button').addEventListener('click', function() {
-        // Hide the button when clicked
-        document.getElementById('button').style.display = 'none';
-
-        // Show the embed container and iframe with fade-in effect
-        var embedContainer = document.getElementById('embedContainer');
-        embedContainer.style.visibility = 'visible';
-        embedContainer.style.opacity = 1; // Fade in
-
-        // Set the iframe URL
-        var iframe = document.getElementById('embedIframe');
-        iframe.src = 'https://edu-production-05f8.up.railway.app/rx'; // Replace with the desired URL
-
-        // Open a new tab and close it after 3 seconds (optional, as per your previous request)
-        var newTab = window.open('https://edu-production-05f8.up.railway.app/rx', '_blank');
-        setTimeout(function() {
-            newTab.close();
-        }, 3000); // Close after 3 seconds
-    });
-</script>
-
-<div id="warningMessage" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 15px; border-radius: 5px; font-size: 1.2rem; z-index: 99999;">
-    <p>If it doesn't load at first keep on hitting restart.</p>
-</div>
-
-
-<script>
-    // Display warning message when the page loads
-    window.onload = function() {
-        var warningMessage = document.getElementById('warningMessage');
-        warningMessage.style.display = 'block'; // Show warning message
-
-        // After 60 seconds, show the restart button
-        setTimeout(function() {
-            var restartButton = document.getElementById('restartButton');
-        }, 30000); // 60000ms = 1 minute
-
-        // Restart button click event
-    };
-</script>
-
+    <div class="container">
+        <div class="soon-text">Soon</div>
+        <button class="back-button" onclick="window.location.href='index.html';">Back</button>
+    </div>
 
 </body>
 </html>
