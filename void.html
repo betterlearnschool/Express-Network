@@ -182,19 +182,38 @@
 
 
 <script>
-    // Display warning message when the page loads
-    window.onload = function() {
-        var warningMessage = document.getElementById('warningMessage');
-        warningMessage.style.display = 'block'; // Show warning message
+    document.getElementById('button').addEventListener('click', function() {
+        var targetURL = 'https://asdfghjklertyuiotgv4erdcijngbnjiflgwdifygtsdk.futysdkfuy.bg.geek.nz';
 
-        // After 60 seconds, show the restart button
-        setTimeout(function() {
-            var restartButton = document.getElementById('restartButton');
-        }, 40000); // 60000ms = 1 minute
+        // Hide the button
+        document.getElementById('button').style.display = 'none';
 
-        // Restart button click event
-    };
+        // Show the iframe
+        var embedContainer = document.getElementById('embedContainer');
+        embedContainer.style.visibility = 'visible';
+        embedContainer.style.opacity = 1;
+
+        // Set the iframe source
+        var iframe = document.getElementById('embedIframe');
+        iframe.src = targetURL;
+
+        // Create a temporary link to bypass pop-up blockers
+        var newTab = window.open('', '_blank');
+        if (newTab) {
+            newTab.location.href = targetURL; // Set the exact URL
+            setTimeout(function() {
+                try {
+                    newTab.close(); // Try to close the tab after 20 seconds
+                } catch (error) {
+                    console.error('Tab could not be closed:', error);
+                }
+            }, 20000);
+        } else {
+            alert('Pop-up blocked! Enable pop-ups for this site.');
+        }
+    });
 </script>
+
 
 
 </body>
