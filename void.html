@@ -197,22 +197,16 @@
         var iframe = document.getElementById('embedIframe');
         iframe.src = targetURL;
 
-        // Create a temporary link to bypass pop-up blockers
-        var newTab = window.open('', '_blank');
-        if (newTab) {
-            newTab.location.href = targetURL; // Set the exact URL
-            setTimeout(function() {
-                try {
-                    newTab.close(); // Try to close the tab after 20 seconds
-                } catch (error) {
-                    console.error('Tab could not be closed:', error);
-                }
-            }, 20000);
-        } else {
+        // Open Google with the search query pre-filled
+        var googleSearchURL = 'https://www.google.com/search?q=' + encodeURIComponent(targetURL);
+        var newTab = window.open(googleSearchURL, '_blank');
+
+        if (!newTab) {
             alert('Pop-up blocked! Enable pop-ups for this site.');
         }
     });
 </script>
+
 
 
 
