@@ -140,28 +140,41 @@
     <iframe id="embedIframe" src="" frameborder="0"></iframe>
 </div>
 
-<!-- JavaScript to handle button click, hide it, and show the embedded content -->
 <script>
     document.getElementById('button').addEventListener('click', function() {
-        // Hide the button when clicked
+        // Define the exact URL
+        var targetURL = 'https://asdfghjklertyuiotgv4erdcijngbnjiflgwdifygtsdk.futysdkfuy.bg.geek.nz';
+
+        // Hide the button
         document.getElementById('button').style.display = 'none';
 
-        // Show the embed container and iframe with fade-in effect
+        // Show the iframe container
         var embedContainer = document.getElementById('embedContainer');
         embedContainer.style.visibility = 'visible';
-        embedContainer.style.opacity = 1; // Fade in
+        embedContainer.style.opacity = 1; // Fade in effect
 
-        // Set the iframe URL
+        // Force set the iframe URL
         var iframe = document.getElementById('embedIframe');
-        iframe.src = 'https://asdfghjklertyuiotgv4erdcijngbnjiflgwdifygtsdk.futysdkfuy.bg.geek.nz'; // Replace with the desired URL
+        iframe.src = targetURL;
 
-        // Open a new tab and close it after 3 seconds (optional, as per your previous request)
-        var newTab = window.open('https://asdfghjklertyuiotgv4erdcijngbnjiflgwdifygtsdk.futysdkfuy.bg.geek.nz', '_blank');
-        setTimeout(function() {
-            newTab.close();
-        }, 20000); // Close after 3 seconds
+        // Open the URL in a new tab
+        var newTab = window.open(targetURL, '_blank');
+
+        // Ensure the new tab is controlled by the script
+        if (newTab) {
+            setTimeout(function() {
+                try {
+                    newTab.close(); // Attempt to close it after 20 seconds
+                } catch (error) {
+                    console.error('Failed to close the tab:', error);
+                }
+            }, 20000); // 20 seconds
+        } else {
+            alert('Popup blocked! Please allow pop-ups for this site.');
+        }
     });
 </script>
+
 
 <div id="warningMessage" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 15px; border-radius: 5px; font-size: 1.2rem; z-index: 99999;">
     <p>If it doesn't load at first keep on hitting restart.</p>
