@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
+    <title>Update Page - Express Network</title>
     <link id="favicon" rel="icon" href="default-icon.ico" type="image/x-icon">
-    <script src="tabandico.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,42 +13,64 @@
             box-sizing: border-box;
         }
 
-        body, html {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body {
+            font-family: 'Exo 2', sans-serif;
             background: linear-gradient(135deg, #0a0b2a, #1a1c3d);
             color: #fff;
-            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+ /* Taskbar Styling */
+ .taskbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.3);
+            transition: width 0.3s ease;
+            z-index: 10; /* Make sure taskbar is above the black hole */
         }
 
-        .container {
-            text-align: center;
+        .taskbar a {
+    display: block;
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+    text-align: center;
+    text-decoration: none; /* Removes the underline */
+    color: #fff;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+.taskbar:hover {
+    width: 110px; /* Slightly reduce hover expansion */
+}
+
+.taskbar a {
+    margin: 8px 0; /* Reduce spacing between icons */
+    font-size: 1.2rem; /* Make icons slightly smaller */
+}
+
+.taskbar a.icon {
+    font-size: 2rem; /* Adjust icon size for consistency */
+}
+
+        .icon {
+            font-size: 1.8rem;
         }
 
-        .soon-text {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-
-        .back-button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #f2a900;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #d28d00;
-        }
-
-        
         .divider {
             width: 60%;
             margin: 10px 0;
@@ -57,14 +79,630 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         }
 
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            width: 100%;
+            margin-left: 80px;
+            z-index: 5;
+        }
+
+        .updates {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .updates h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #42b0ff;
+            text-shadow: 0 0 10px rgba(66, 176, 255, 0.5);
+        }
+
+        .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(255, 165, 0, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid orange;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-indicator.online {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+        }
+
+        .status-indicator.offline {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+        }
+
+        .status-indicator.maintenance {
+            background: rgba(255, 165, 0, 0.3);
+            border: 1px solid orange;
+        }
+
+        .update-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        .update-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .update-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .update-item.warning {
+            border-left-color: orange;
+        }
+
+        .update-item.error {
+            border-left-color: #ff5500;
+        }
+
+        .update-item.success {
+            border-left-color: #42b0ff;
+        }
+
+        .update-item .date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .update-item .content {
+            display: flex;
+            align-items: center;
+        }
+
+        .update-item .icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .admin-panel {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .admin-panel h2 {
+            color: #ff7b00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .admin-section {
+            margin-bottom: 20px;
+        }
+
+        .admin-section h3 {
+            color: #42b0ff;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .status-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .status-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            width: 32%;
+        }
+
+        .status-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-btn.online {
+            background: linear-gradient(135deg, #00cc00, #009900);
+        }
+
+        .status-btn.offline {
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+        }
+
+        .status-btn.maintenance {
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+        }
+
+        .new-update-form textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 10px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .update-type-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .type-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            width: 32%;
+        }
+
+        .type-btn.success {
+            background: linear-gradient(135deg, #42b0ff, #1a7dff);
+        }
+
+        .type-btn.warning {
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+        }
+
+        .type-btn.error {
+            background: linear-gradient(135deg, #ff5500, #cc4400);
+        }
+
+        .type-btn.active {
+            box-shadow: 0 0 0 2px white;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #42b0ff, #1a7dff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .planet-1 {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ff7b00, #ff5500);
+            top: 20%;
+            right: 15%;
+            animation: orbit 100s linear infinite;
+        }
+
+        .planet-2 {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #42b0ff, #1a7dff);
+            bottom: 20%;
+            left: 10%;
+            animation: orbit 80s linear infinite reverse;
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0) translateX(0) rotate(0); }
+            100% { transform: rotate(360deg) translateX(0) rotate(-360deg); }
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.7;
+            box-shadow: 0 0 3px #fff;
+            z-index: 0;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; box-shadow: 0 0 2px #fff; }
+            100% { opacity: 1; box-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(10, 11, 42, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(66, 176, 255, 0.3);
+            box-shadow: 0 0 30px rgba(66, 176, 255, 0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ff5500;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #ff7b00, #ff5500);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Add responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 15px 15px 15px;
+            }
+            
+            .taskbar {
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                padding: 0;
+                justify-content: space-around;
+            }
+            
+            .taskbar:hover {
+                width: 100%;
+            }
+            
+            .taskbar a {
+                margin: 0;
+            }
+            
+            .taskbar a .label {
+                display: none;
+            }
+            
+            .taskbar:hover a .label {
+                display: none;
+            }
+            
+            .divider {
+                display: none;
+            }
+            
+            .status-controls, .update-type-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .status-btn, .type-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
-<body>
+<div class="taskbar">
+    <a href="index.html" class="icon home">&#x1F3E0;</a> <!-- Home Icon -->
+    <hr class="divider"> <!-- Horizontal Line -->
+    <a href="games.html" class="icon">&#x1F3AE;</a> <!-- Game Icon -->
+    <a href="search.html" class="icon">&#x1F50D;</a> <!-- Search Icon -->
+    <a href="news.html" class="icon">&#x1F4F0;</a> <!-- News Icon -->
+    <a href="settings.html" class="icon">&#x2699;</a> <!-- Settings Icon -->
+    <a href="about.html" class="icon">&#x1F4AC;</a> <!-- About Icon -->
+    <a href="amin.html" class="icon">&#x1F9F0;</a> <!-- About Icon -->
+</div>
+
+
+    <div class="space-bg"></div>
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
 
     <div class="container">
-        <div class="soon-text">Soon</div>
-        <button class="back-button" onclick="window.location.href='index.html';">Back</button>
+        <div class="updates">
+            <div class="update-header">
+                <h1>Latest Updates</h1>
+                <div id="server-status" class="status-indicator maintenance">
+                    <span id="status-text">Server Status: Maintenance</span>
+                </div>
+            </div>
+            
+            <div class="update-list">
+                <div class="update-item warning">
+                    <div class="date">March 19, 2025</div>
+                    <div class="content">
+                        <span class="icon">📢</span>
+                        <span>No updates scheduled for Wednesdays as it's our maintenance day.</span>
+                    </div>
+                </div>
+                
+                <div class="update-item error">
+                    <div class="date">March 18, 2025</div>
+                    <div class="content">
+                        <span class="icon">🚀</span>
+                        <span>Attempted to update the search bar but encountered issues. Working on a fix.</span>
+                    </div>
+                </div>
+                
+                <div class="update-item error">
+                    <div class="date">March 18, 2025</div>
+                    <div class="content">
+                        <span class="icon">🌎</span>
+                        <span>Fixed Void Network but experiencing connectivity issues. Development team is working on a solution.</span>
+                    </div>
+                </div>
+                
+                <div class="update-item success">
+                    <div class="date">March 17, 2025</div>
+                    <div class="content">
+                        <span class="icon">✅</span>
+                        <span>Successfully deployed UI improvements for the taskbar navigation.</span>
+                    </div>
+                </div>
+                
+                <div class="update-item success">
+                    <div class="date">March 16, 2025</div>
+                    <div class="content">
+                        <span class="icon">🔧</span>
+                        <span>Optimized server performance, resulting in 30% faster page loading times.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="admin-login-btn" class="submit-btn">Admin Login</button>
+        </div>
+        
+        <!-- Admin Panel (hidden by default) -->
+        <div id="admin-panel" class="admin-panel" style="display: none;">
+            <h2>Admin Panel</h2>
+            
+            <div class="admin-section">
+                <h3>Server Status Control</h3>
+                <div class="status-controls">
+                    <button class="status-btn online" data-status="online">Set Online</button>
+                    <button class="status-btn offline" data-status="offline">Set Offline</button>
+                    <button class="status-btn maintenance" data-status="maintenance">Set Maintenance</button>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h3>Post New Update</h3>
+                <div class="new-update-form">
+                    <div class="update-type-selector">
+                        <button class="type-btn success active" data-type="success">Success</button>
+                        <button class="type-btn warning" data-type="warning">Warning</button>
+                        <button class="type-btn error" data-type="error">Error</button>
+                    </div>
+                    <textarea id="update-text" placeholder="Enter new update information..." rows="3"></textarea>
+                    <button id="post-update" class="submit-btn">Post Update</button>
+                </div>
+            </div>
+        </div>
     </div>
+    
 
+    <script>
+        // Create stars in the background
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            document.body.appendChild(star);
+        }
+        
+        // Get current date
+        const todayDate = new Date().toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('login-modal');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const closeBtn = document.querySelector('.modal-close');
+        const loginSubmitBtn = document.getElementById('login-submit');
+        const adminPanel = document.getElementById('admin-panel');
+        
+        adminLoginBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Simple admin login (password: admin123)
+        loginSubmitBtn.addEventListener('click', () => {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'admin123') {
+                modal.style.display = 'none';
+                adminLoginBtn.style.display = 'none';
+                adminPanel.style.display = 'block';
+            } else {
+                alert('Incorrect password. Try again.');
+            }
+        });
+        
+        // Server status control
+        const statusBtns = document.querySelectorAll('.status-btn');
+        const serverStatus = document.getElementById('server-status');
+        const statusText = document.getElementById('status-text');
+        
+        statusBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const status = btn.getAttribute('data-status');
+                
+                // Update indicator class
+                serverStatus.className = 'status-indicator ' + status;
+                
+                // Update text
+                let statusMessage = 'Server Status: ';
+                switch(status) {
+                    case 'online':
+                        statusMessage += 'Online';
+                        break;
+                    case 'offline':
+                        statusMessage += 'Offline';
+                        break;
+                    case 'maintenance':
+                        statusMessage += 'Maintenance';
+                        break;
+                }
+                statusText.textContent = statusMessage;
+                
+                // Add a new update about status change
+                const updateList = document.querySelector('.update-list');
+                const newStatusUpdate = document.createElement('div');
+                newStatusUpdate.className = `update-item ${status === 'online' ? 'success' : (status === 'offline' ? 'error' : 'warning')}`;
+                newStatusUpdate.innerHTML = `
+                    <div class="date">${todayDate}</div>
+                    <div class="content">
+                        <span class="icon">${status === 'online' ? '✅' : (status === 'offline' ? '❌' : '⚠️')}</span>
+                        <span>Server status changed to ${status.toUpperCase()}</span>
+                    </div>
+                `;
+                updateList.insertBefore(newStatusUpdate, updateList.firstChild);
+            });
+        });
+        
+        // Update type selection
+        const typeBtns = document.querySelectorAll('.type-btn');
+        let selectedType = 'success';
+        
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                typeBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Update selected type
+                selectedType = btn.getAttribute('data-type');
+            });
+        });
+        
+        // Post update functionality
+        document.getElementById('post-update').addEventListener('click', () => {
+            const updateText = document.getElementById('update-text').value.trim();
+            
+            if (updateText) {
+                const updateList = document.querySelector('.update-list');
+                const newUpdate = document.createElement('div');
+                newUpdate.className = `update-item ${selectedType}`;
+                
+                // Set icon based on type
+                let icon = '📝';
+                if (selectedType === 'success') icon = '✅';
+                else if (selectedType === 'warning') icon = '⚠️';
+                else if (selectedType === 'error') icon = '❌';
+                
+                newUpdate.innerHTML = `
+                    <div class="date">${todayDate}</div>
+                    <div class="content">
+                        <span class="icon">${icon}</span>
+                        <span>${updateText}</span>
+                    </div>
+                `;
+                updateList.insertBefore(newUpdate, updateList.firstChild);
+                document.getElementById('update-text').value = '';
+            }
+        });
+    </script>
 </body>
 </html>
